@@ -1,4 +1,5 @@
 import json
+import os
 import sqlite3
 from flask import Flask, render_template, request, redirect, url_for, session, g, flash, jsonify
 from datetime import datetime, timedelta
@@ -424,4 +425,5 @@ def demote_user(user_id):
 
 if __name__ == "__main__":
     init_db()
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=True)
