@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="UTF-8">
+        <title>Dashboard</title>
+        <style>
+        body {
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #6b73ff 0%, #000dff 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .bg-shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.5;
+            z-index: 0;
+        }
+        .bg-shape1 {
+            width: 400px; height: 400px; background: #ff6bcb; top: -100px; left: -100px;
+            animation: float1 8s infinite alternate;
+        }
+        .bg-shape2 {
+            width: 300px; height: 300px; background: #6bffb3; bottom: -80px; right: -80px;
+            animation: float2 10s infinite alternate;
+        }
+        @keyframes float1 { to { transform: translateY(40px) scale(1.1); } }
+        @keyframes float2 { to { transform: translateY(-40px) scale(1.1); } }
+        .card {
+            position: relative;
+            z-index: 1;
+            background: rgba(255,255,255,0.18);
+            box-shadow: 0 8px 32px 0 rgba(31,38,135,0.37);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.18);
+            padding: 2.5rem 2.5rem 2rem 2.5rem;
+            min-width: 340px;
+            max-width: 95vw;
+        }
+        h2 {
+            text-align: center;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+            font-size: 2rem;
+            letter-spacing: 1px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #4a5568;
+            margin-bottom: 1.2rem;
+            font-size: 1.1rem;
+        }
+        .schedule-list {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 1.5rem;
+        }
+        .schedule-list li {
+            background: rgba(255,255,255,0.7);
+            margin-bottom: 0.7rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(49,130,206,0.08);
+            padding: 0.8rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 1.08rem;
+            color: #2d3748;
+            gap: 1rem;
+        }
+        .schedule-info {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+        .schedule-info i {
+            color: #3182ce;
+            font-size: 1.2rem;
+        }
+        .schedule-actions a {
+            color: #3182ce;
+            background: none;
+            border: none;
+            padding: 0.3rem 0.7rem;
+            border-radius: 6px;
+            font-size: 0.98rem;
+            font-weight: 500;
+            text-decoration: none;
+            margin-left: 0.3rem;
+            transition: background 0.2s, color 0.2s;
+        }
+        .schedule-actions a:hover {
+            background: #3182ce;
+            color: #fff;
+        }
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 1.2rem;
+            margin-top: 1.2rem;
+        }
+        .action-btn {
+            background: linear-gradient(90deg,#3182ce 0%,#6b73ff 100%);
+            color: #fff;
+            border: none;
+            padding: 0.7rem 1.2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(49,130,206,0.12);
+            text-decoration: none;
+            transition: background 0.2s, transform 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .action-btn:hover {
+            background: linear-gradient(90deg,#2563eb 0%,#6b73ff 100%);
+            transform: translateY(-2px) scale(1.03);
+        }
+        @media (max-width: 500px) {
+            .card { padding: 1.2rem 0.5rem; min-width: 90vw; }
+            h2 { font-size: 1.3rem; }
+            .schedule-list li { font-size: 0.98rem; padding: 0.6rem 0.5rem; }
+            .actions { gap: 0.5rem; }
+        }
+        </style>
+<body>
+  <div style="width:100vw;position:fixed;top:0;left:0;z-index:10;background:rgba(255,255,255,0.7);backdrop-filter:blur(8px);box-shadow:0 4px 16px #6b73ff33;padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #e0e7ff;">
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <a href="{{ url_for('profile') }}" style="font-size:2.5rem;color:#4f46e5;text-decoration:none;transition:color 0.2s;filter:drop-shadow(0 2px 8px #6366f1aa);" title="Profile" onmouseover="this.style.color='#2563eb'" onmouseout="this.style.color='#4f46e5'"><i class="fa fa-user-circle"></i></a>
+      <span style="font-size:1.2rem;font-weight:700;color:#2563eb;text-shadow:0 1px 4px #a5b4fc;letter-spacing:0.5px;">{{ user }}</span>
+    </div>
+    <a href="{{ url_for('logout') }}" style="font-size:1rem;color:#fff;background:linear-gradient(90deg,#6366f1 0%,#2563eb 100%);padding:0.5rem 1.2rem;border-radius:2rem;text-decoration:none;font-weight:600;box-shadow:0 2px 8px #6366f1aa;transition:background 0.2s;" onmouseover="this.style.background='linear-gradient(90deg,#2563eb 0%,#6366f1 100%)'" onmouseout="this.style.background='linear-gradient(90deg,#6366f1 0%,#2563eb 100%)'">
+      <i class="fa fa-sign-out-alt"></i> Logout
+    </a>
+  </div>
+  <div style="height:4.5rem;"></div>
+    <div class="bg-shape bg-shape1"></div>
+    <div class="bg-shape bg-shape2"></div>
+    <div class="card">
+        <h2 style="font-size:2.2rem; font-weight:700; color:#1a202c; text-shadow:0 2px 8px #6b73ff99;">Welcome {{ user }}</h2>
+        <div class="subtitle" style="font-size:1.2rem; font-weight:600; color:#2563eb;">Today is <b>{{ today }}</b></div>
+        <h3 style="text-align:center; color:black; margin-bottom:1rem; font-size:1.3rem; font-weight:700;">Your schedule:</h3>
+        <ul class="schedule-list">
+            {% for item in today_events %}
+                <li>
+                    <span class="schedule-info">
+                        <i class="fa fa-clock"></i> {{ item['time'] }}
+                        <i class="fa fa-book"></i> {{ item['course'] }}
+                        <i class="fa fa-location-dot"></i> {{ item['venue'] }}
+                        {% if item['recurrence'] == 'none' %}
+                          <span style="color:#e53e3e;font-size:0.95rem;margin-left:0.7rem;">(One-time)</span>
+                        {% else %}
+                          <span style="color:#2563eb;font-size:0.95rem;margin-left:0.7rem;">(Recurring)</span>
+                        {% endif %}
+                    </span>
+                    <span class="schedule-actions">
+                        <a href="{{ url_for('edit', schedule_id=item['id']) }}"><i class="fa fa-edit"></i> Edit</a>
+                        <a href="{{ url_for('delete', schedule_id=item['id']) }}" onclick="return confirm('Delete this schedule?');"><i class="fa fa-trash"></i> Delete</a>
+                    </span>
+                </li>
+            {% else %}
+                <li style="text-align:center; color:#fff; background:none; box-shadow:none;">No schedule for today</li>
+            {% endfor %}
+        </ul>
+                <div class="actions">
+                    <a class="action-btn" href="{{ url_for('add') }}"><i class="fa fa-plus"></i> Add Schedule</a>
+                    <a class="action-btn" href="{{ url_for('view_all') }}"><i class="fa fa-list"></i> View All Schedules</a>
+                    <a class="action-btn" href="{{ url_for('calendar') }}"><i class="fa fa-calendar"></i> Calendar View</a>
+            </div>
+    </div>
+    <!-- Toast Notification for Reminders -->
+    {% if upcoming_reminders %}
+      <div id="reminder-toast-container" style="position:fixed;top:1.5rem;right:1.5rem;z-index:9999;">
+        {% for reminder in upcoming_reminders %}
+          <div class="reminder-toast" style="background:rgba(255,255,255,0.85);backdrop-filter:blur(8px);box-shadow:0 4px 16px #6366f1aa;border-radius:1rem;padding:1rem 1.5rem;margin-bottom:1rem;min-width:260px;max-width:350px;display:flex;align-items:center;justify-content:space-between;">
+            <div>
+              <div style="font-weight:700;color:#2563eb;font-size:1.1rem;">Reminder: {{ reminder.course }}</div>
+              <div style="color:#444;font-size:0.97rem;">Starts in {{ reminder.minutes_left }} min at <b>{{ reminder.venue }}</b></div>
+              <div style="color:#6366f1;font-size:0.95rem;">Time: {{ reminder.time }}</div>
+            </div>
+            <button onclick="this.parentElement.style.display='none'" style="background:none;border:none;font-size:1.3rem;color:#e53e3e;cursor:pointer;margin-left:1rem;">&times;</button>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script>
+// Simple beep sound
+function playBeep() {
+  const ctx = new (window.AudioContext || window.webkitAudioContext)();
+  const oscillator = ctx.createOscillator();
+  oscillator.type = 'sine';
+  oscillator.frequency.setValueAtTime(880, ctx.currentTime);
+  oscillator.connect(ctx.destination);
+  oscillator.start();
+  setTimeout(() => { oscillator.stop(); ctx.close(); }, 250);
+}
+
+// Poll for reminders every 30 seconds
+let lastReminders = [];
+function pollReminders() {
+  fetch('/reminders')
+    .then(res => res.json())
+    .then(data => {
+      if (Array.isArray(data) && data.length > 0) {
+        // Only show new reminders
+        const newReminders = data.filter(r => !lastReminders.some(lr => lr.course === r.course && lr.time === r.time));
+        if (newReminders.length > 0) {
+          showReminderPopup(newReminders[0]);
+          playBeep();
+        }
+        lastReminders = data;
+      }
+    });
+}
+function showReminderPopup(reminder) {
+  const container = document.createElement('div');
+  container.id = 'reminder-toast-container';
+  container.style = 'position:fixed;top:1.5rem;right:1.5rem;z-index:9999;';
+  container.innerHTML = `<div class="reminder-toast" style="background:rgba(255,255,255,0.85);backdrop-filter:blur(8px);box-shadow:0 4px 16px #6366f1aa;border-radius:1rem;padding:1rem 1.5rem;margin-bottom:1rem;min-width:260px;max-width:350px;display:flex;align-items:center;justify-content:space-between;">
+    <div>
+      <div style="font-weight:700;color:#2563eb;font-size:1.1rem;">Reminder: ${reminder.course}</div>
+      <div style="color:#444;font-size:0.97rem;">Starts in ${reminder.minutes_left} min at <b>${reminder.venue}</b></div>
+      <div style="color:#6366f1;font-size:0.95rem;">Time: ${reminder.time}</div>
+    </div>
+    <button onclick="this.parentElement.parentElement.remove()" style="background:none;border:none;font-size:1.3rem;color:#e53e3e;cursor:pointer;margin-left:1rem;">&times;</button>
+  </div>`;
+  document.body.appendChild(container);
+  setTimeout(() => { container.remove(); }, 10000);
+}
+setInterval(pollReminders, 30000);
+window.onload = pollReminders;
+</script>
+</body>
+</html>

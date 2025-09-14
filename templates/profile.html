@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Profile</title>
+    <style>
+    body {
+      min-height: 100vh;
+      margin: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #6b73ff 0%, #000dff 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .bg-shape {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.5;
+      z-index: 0;
+    }
+    .bg-shape1 {
+      width: 400px; height: 400px; background: #ff6bcb; top: -100px; left: -100px;
+      animation: float1 8s infinite alternate;
+    }
+    .bg-shape2 {
+      width: 300px; height: 300px; background: #6bffb3; bottom: -80px; right: -80px;
+      animation: float2 10s infinite alternate;
+    }
+    @keyframes float1 { to { transform: translateY(40px) scale(1.1); } }
+    @keyframes float2 { to { transform: translateY(-40px) scale(1.1); } }
+    .card {
+      position: relative;
+      z-index: 1;
+      background: rgba(255,255,255,0.18);
+      box-shadow: 0 8px 32px 0 rgba(31,38,135,0.37);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.18);
+      padding: 2.5rem 2.5rem 2rem 2.5rem;
+      min-width: 340px;
+      max-width: 95vw;
+    }
+    h2 {
+      text-align: center;
+      color: #2d3748;
+      margin-bottom: 1.5rem;
+      font-size: 2rem;
+      letter-spacing: 1px;
+    }
+    .profile-info {
+      margin-bottom: 2rem;
+      font-size: 1.1rem;
+      color: #2d3748;
+      text-align: center;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      margin-bottom: 1.2rem;
+    }
+    label {
+      color: #4a5568;
+      margin-bottom: 0.3rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .input-group {
+      display: flex;
+      align-items: center;
+      background: rgba(255,255,255,0.6);
+      border-radius: 8px;
+      padding: 0.2rem 0.7rem;
+      border: 1px solid #cbd5e0;
+    }
+    .input-group i {
+      color: #3182ce;
+      font-size: 1.2rem;
+      margin-right: 0.5rem;
+    }
+    input[type="email"], input[type="password"] {
+      padding: 0.6rem 0.4rem;
+      border: none;
+      background: transparent;
+      font-size: 1rem;
+      outline: none;
+      width: 100%;
+      color: #2d3748;
+    }
+    input:focus {
+      background: rgba(49,130,206,0.08);
+    }
+    button {
+      background: linear-gradient(90deg,#3182ce 0%,#6b73ff 100%);
+      color: #fff;
+      border: none;
+      padding: 0.8rem;
+      border-radius: 8px;
+      font-size: 1.08rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(49,130,206,0.12);
+      transition: background 0.2s, transform 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    button:hover {
+      background: linear-gradient(90deg,#2563eb 0%,#6b73ff 100%);
+      transform: translateY(-2px) scale(1.03);
+    }
+    .link {
+      display: block;
+      text-align: center;
+      margin-top: 1.2rem;
+      color: #3182ce;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      transition: color 0.2s;
+    }
+    .link:hover {
+      color: #2563eb;
+      text-decoration: underline;
+    }
+    .msg {
+      text-align: center;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
+    @media (max-width: 500px) {
+      .card { padding: 1.2rem 0.5rem; min-width: 90vw; }
+      h2 { font-size: 1.3rem; }
+    }
+    </style>
+</head>
+<body>
+  <div class="bg-shape bg-shape1"></div>
+  <div class="bg-shape bg-shape2"></div>
+  <div class="card">
+    <h2>User Profile</h2>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="msg">
+        {% for category, message in messages %}
+          <span style="color: {% if category == 'danger' %}red{% else %}green{% endif %};">{{ message }}</span>
+        {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    <div class="profile-info">
+      <strong>Username:</strong> {{ user['username'] }}<br>
+      <strong>Email:</strong> {{ user['email'] if user['email'] else 'Not set' }}
+    </div>
+    <form method="POST" action="{{ url_for('update_profile') }}">
+      <label><i class="fa fa-envelope"></i> Update Email:</label>
+      <div class="input-group"><i class="fa fa-envelope"></i><input type="email" name="email" value="{{ user['email'] if user['email'] else '' }}" required></div>
+      <button type="submit"><i class="fa fa-save"></i> Save Email</button>
+    </form>
+    <form method="POST" action="{{ url_for('change_password') }}">
+      <label><i class="fa fa-lock"></i> Change Password:</label>
+      <div class="input-group"><i class="fa fa-lock"></i><input type="password" name="password" required></div>
+      <button type="submit"><i class="fa fa-key"></i> Change Password</button>
+    </form>
+    <a class="link" href="{{ url_for('index') }}"><i class="fa fa-arrow-left"></i> Back to Dashboard</a>
+  </div>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</body>
+</html>

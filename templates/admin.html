@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f6f8fa; margin: 0; }
+        .container { max-width: 900px; margin: 2rem auto; background: #fff; border-radius: 16px; box-shadow: 0 4px 24px #6366f122; padding: 2rem; }
+        h1 { color: #2563eb; text-align: center; margin-bottom: 2rem; }
+        .stats { display: flex; gap: 2rem; justify-content: center; margin-bottom: 2rem; }
+        .stat { background: #e0e7ff; border-radius: 10px; padding: 1.2rem 2rem; text-align: center; font-size: 1.2rem; color: #1a202c; box-shadow: 0 2px 8px #6366f122; }
+        table { width: 100%; border-collapse: collapse; margin-top: 2rem; }
+        th, td { padding: 0.8rem 1rem; border-bottom: 1px solid #e0e7ff; text-align: left; }
+        th { background: #6366f1; color: #fff; }
+        tr:last-child td { border-bottom: none; }
+        .admin-badge { color: #fff; background: #2563eb; border-radius: 6px; padding: 0.2rem 0.7rem; font-size: 0.95rem; margin-left: 0.5rem; }
+        .btn { background: #6366f1; color: #fff; border: none; border-radius: 6px; padding: 0.4rem 1rem; cursor: pointer; font-size: 1rem; margin-right: 0.5rem; }
+        .btn.demote { background: #e53e3e; }
+        .btn:hover { background: #2563eb; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Admin Dashboard</h1>
+        <div class="stats">
+            <div class="stat">Total Users: <b>{{ total_users }}</b></div>
+            <div class="stat">Total Schedules: <b>{{ total_schedules }}</b></div>
+            <div class="stat">Busiest Day: <b>{{ busiest_day.day if busiest_day else 'N/A' }}</b></div>
+        </div>
+        <h2>User Management</h2>
+        <table>
+            <tr><th>Username</th><th>Role</th><th>Actions</th></tr>
+            {% for u in all_users %}
+            <tr>
+                <td>{{ u.username }}</td>
+                <td>{% if u.is_admin %}<span class="admin-badge">Admin</span>{% else %}User{% endif %}</td>
+                <td>
+                    {% if not u.is_admin %}
+                    <a href="{{ url_for('promote_user', user_id=u.id) }}" class="btn">Promote to Admin</a>
+                    {% else %}
+                    <a href="{{ url_for('demote_user', user_id=u.id) }}" class="btn demote">Demote</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+</html>
